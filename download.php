@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/admin/dbconnect.php';
 
-$configArray = require_once(__DIR__ . 'resources/config.php');
+$configArray = require_once(__DIR__ . '/resources/config.php');
 
 $maxdownloads = "2";
 $maxtime = "7200";
