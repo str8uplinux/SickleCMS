@@ -102,15 +102,15 @@ class DirectoryLister {
      * @return array Array of breadcrumbs
      * @access public
      */
-    public function listBreadcrumbs($directory = null) {
+     public function listBreadcrumbs($directory = null) {
 
         // Set directory varriable if left blank
         if ($directory === null) {
-            $directory = $this->_directory;
+            $directory = preg_replace("#".$this->_config['base_file_dir']."#", "", $this->_directory, 1);
         }
 
         // Explode the path into an array
-        $dirArray = explode('/', $directory);
+        $dirArray = explode("/", $directory);
 
         // Statically set the Home breadcrumb
         $breadcrumbsArray[] = array(
@@ -136,7 +136,7 @@ class DirectoryLister {
                 }
 
                 // Combine the base path and dir path 
-                $link = $this-> _appURL . '?dir=' . urlencode($dirPath);
+                $link = $this-> _appURL . '?dir=' . $dirPath;
 
                 $breadcrumbsArray[] = array(
                     'link' => $link,
@@ -183,6 +183,16 @@ class DirectoryLister {
         return $this->_config['theme_name'];
     }
 
+    /**
+     * Returns the directory path that is set in the config
+     * This is what allows files to be anywhere php can read.
+     *
+     * @return string File Base Directory
+     * @access public
+     */
+    public function getFileBaseDir() {
+        return $this->_config['base_file_dir'];
+    }
 
     /**
      * Returns the path to the chosen theme directory
@@ -330,7 +340,7 @@ class DirectoryLister {
 
         // Check for an empty variable
         if (empty($dir) || $dir == '.') {
-            return '.';
+            return $this->_config['base_file_dir'] . '.';
         }
 
         // Eliminate double slashes
@@ -349,7 +359,7 @@ class DirectoryLister {
             $this->setSystemMessage('error', '<b>ERROR:</b> File path does not exist');
 
             // Return the web root
-            return '.';
+            return $this->_config['base_file_dir'] . '.';
         }
 
         // Prevent access to hidden files
@@ -358,20 +368,24 @@ class DirectoryLister {
             $this->setSystemMessage('error', '<b>ERROR:</b> Access denied');
 
             // Set the directory to web root
-            return '.';
+            return $this->_config['base_file_dir'] . '.';
         }
 
         // Prevent access to parent folders
+        if (strpos($dir, $this->_config['base_file_dir']) == false) {
+            $directoryPath = $dir;
+        } else {
         if (strpos($dir, '<') !== false || strpos($dir, '>') !== false
         || strpos($dir, '..') !== false || strpos($dir, '/') === 0) {
             // Set the error message
             $this->setSystemMessage('error', '<b>ERROR:</b> An invalid path string was deceted');
 
             // Set the directory to web root
-            return '.';
+            return $this->_config['base_file_dir'] . '.';
         } else {
             // Should stop all URL wrappers (Thanks to Hexatex)
             $directoryPath = $dir;
+        }
         }
 
         // Return
@@ -433,15 +447,21 @@ class DirectoryLister {
 
                 if ($file == '..') {
 
-                    if ($this->_directory != '.') {
+                    if ($this->_directory !=  $this->_config['base_file_dir'].'.') {
                         // Get parent directory path
                         $pathArray = explode('/', $relativePath);
                         unset($pathArray[count($pathArray)-1]);
                         unset($pathArray[count($pathArray)-1]);
-                        $directoryPath = implode('/', $pathArray);
+                        $directoryPath = implode("/", $pathArray);
+
+                       if ($directoryPath == preg_replace("#/#", "", $this->_config['base_file_dir'])) {
+                            $directoryPath = "";
+                        } else {
+                            $directoryPath = preg_replace("#".$this->_config['base_file_dir']."#", "", $directoryPath, 1);
+                        }
 
                         if (!empty($directoryPath)) {
-                            $directoryPath = '?dir=' . urlencode($directoryPath);
+                            $directoryPath = '?dir=' . $directoryPath;
                         }
 
                         // Add file info to the array
@@ -465,11 +485,21 @@ class DirectoryLister {
                             $downloads = '0';
                         }
 
+                        $relativePath2 = preg_replace("#".$this->_config['base_file_dir']."#", "", $relativePath, 1);
+
+                        if (substr($relativePath2, 0, 2) == './') {
+                            $filePath = substr($relativePath2, 2);
+                        }
+
+                        if (substr($relativePath2, 0, 1) == '.') {
+                            $filePath = substr($relativePath2, 1);
+                        }
+
                         // Build the file path
                         if (is_dir($relativePath)) {
-                            $filePath = '?dir=' . urlencode($relativePath);
+                            $filePath = '?dir=' . $relativePath2;
                         } else {
-                            $filePath = $relativePath;
+                            $filePath = 'getdownload.php?file=' . $relativePath2;
                         }
 
                         // Add the info to the main array

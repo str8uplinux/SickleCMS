@@ -1,7 +1,24 @@
 <?php
-// A script to generate unique download keys for the purpose of protecting downloadable goods
+/* Copyright (c) 2013-2013 Simon Sickle <simon@simonsickle.com>
+ *
+ * This software distributed under the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * This script is designed to protect files, to enable
+ * a better adsense turnout. This script saves data to 
+ * mysql, in a secure, unique, hash string that will likely
+ * neve be duplicateable
+ *
+ */
 
-require_once __DIR__ . '/admin/dbconnect.php';
+require_once __DIR__ . '/resources/admin/dbconnect.php';
+
+// Include the DirectoryLister class
+require_once('resources/DirectoryLister.php');
+
+// Initialize the DirectoryLister object
+$lister = new DirectoryLister();
+
 
 	// Get the filename given by directory linker
 	$fileget = $_GET["file"];
@@ -14,6 +31,8 @@ require_once __DIR__ . '/admin/dbconnect.php';
 	} else {
 		$file = $fileget;
 	}
+
+        $filepath = $lister->getFileBaseDir().$file;
 
 	if(empty($_SERVER['REQUEST_URI'])) {
     	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
@@ -33,9 +52,9 @@ require_once __DIR__ . '/admin/dbconnect.php';
 	// Get the activation time
 	$time = date('U');
 
-// Write the key and activation time to the database as a new row.
-	$registerid = mysql_query("INSERT INTO downloadkey (uniqueid,timestamp,filename) 
-                                   VALUES(\"$key\",\"$time\",\"$file\")") or die(mysql_error());
+        // Write the key and activation time to the database as a new row.
+        $registerid = mysql_query("INSERT INTO downloadkey (uniqueid,timestamp,filename) 
+                                   VALUES(\"$key\",\"$time\",\"$filepath\")") or die(mysql_error());
 
 // Create the filename
 function curPageURL() {
@@ -54,7 +73,7 @@ function curPageURL() {
 
 <DOCUTYPE html>
 <head>
-<title><?php echo "Getting " . $file; ?></title>
+<title><?php echo "Getting " . basename($filepath); ?></title>
 <script type="text/javascript">
                     window.setTimeout(function() {
                         location.href = 'index.php';
@@ -79,26 +98,29 @@ if ($file != ""){
 	$filename = basename($file);
 	echo "<a href=\"$data\">$filename</a><br><br>";
 } else {
-	echo "<p>Error: File NOT found.... Yeah, its just not there bud. Let me check again... Nope just try again.<p><br><br>";
+	echo "<p>Error: File NOT found....</p><br><br>";
 }
 
 
 //Get MD5. Create and save if not in database already
-/*
-$query = sprintf("SELECT * FROM md5sums WHERE filename= '%s'",
-mysql_real_escape_string($file));
-$result = mysql_query($query) or die(mysql_error());
-$row = mysql_fetch_array($result);
-        if (!$row) {
-                $md5 = md5_file($file);
-                $sqlread = mysql_query("INSERT INTO md5sums (filename,md5) VALUES(\"$file\",\"$md5\")") or die(mysql_error());
-                echo "MD5: " . $md5;
-        }else{
-                echo "MD5: " . $row['md5'];
+if (file_exists($filepath)) {
+    $query = sprintf("SELECT * FROM md5sums WHERE filename= '%s'",
+        mysql_real_escape_string($filepath));
+    $result = mysql_query($query) or die(mysql_error());
+    $row = mysql_fetch_array($result);
+        if ($row) {
+            echo "MD5: " . $row['md5'];
+        } else {
+            $md5 = md5_file($filepath);
+            $sqlread = mysql_query("INSERT INTO md5sums (filename,md5) VALUES(\"$file\",\"$md5\")") or die(mysql_error());
+            echo "MD5: " . $md5;
+        }
+} else {
+    echo "<br>File doesn't exist";
 }
 
 echo "<br><br>";
-*/
+
 echo "Redirecting in 10 seconds"; ?> </p>
 
 <p>Click here if you are not redirected automatically in 10 seconds<br/>

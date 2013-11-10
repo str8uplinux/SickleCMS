@@ -1,6 +1,17 @@
 <?php
+/* Copyright (c) 2013-2013 Simon Sickle <simon@simonsickle.com>
+ *
+ * This software distributed under the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * This script is designed to protect files, to enable
+ * a better adsense turnout. This script reads data from
+ * mysql, a secure has string that will likely
+ * neve be duplicateable thats created by getdownload.php
+ *
+ */
 
-require_once __DIR__ . '/admin/dbconnect.php';
+require_once(__DIR__ . '/resources/admin/dbconnect.php');
 
 $configArray = require_once(__DIR__ . '/resources/config.php');
 

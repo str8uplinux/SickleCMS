@@ -7,6 +7,7 @@ return array(
     'list_folders_first' => true,
     'list_sort_order'    => 'natcasesort',
     'theme_name'         => 'bootstrap',
+    'base_file_dir'      => 'files/',
     
     // Array of allowed extensions
     'allowed_extensions' => array(
@@ -22,11 +23,7 @@ return array(
         '.htaccess',
         '.htpasswd',
         'resources',
-        'analytics.inc',
-	'README.md',
 	'private',
-	'admin',
-	'dbconnect.php',
 	'download.php',
 	'getdownload.php',
     ),

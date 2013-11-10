@@ -17,12 +17,12 @@
         die($data);
 
     }
-
+    
     // Initialize the directory array
     if (isset($_GET['dir'])) {
-        $dirArray = $lister->listDirectory($_GET['dir']);
+        $dirArray = $lister->listDirectory($lister->getFileBaseDir() . $_GET['dir']);
     } else {
-        $dirArray = $lister->listDirectory('.');
+        $dirArray = $lister->listDirectory($lister->getFileBaseDir() . '.');
     }
 
     // Define theme path

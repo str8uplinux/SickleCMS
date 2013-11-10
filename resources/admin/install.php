@@ -8,7 +8,7 @@
     Username: <input type="text" name="user" value="root">
     <br>Password: <input type="password" name="password">
     <br>Host: <input type="text" name="host" value="localhost">
-    <br>Database Name <input type="text" name="database" valuse="SickleCMS">
+    <br>Database Name <input type="text" name="database" value="SickleCMS">
     <br><input type="submit" value="Start Install!">
   </form>
 </body>

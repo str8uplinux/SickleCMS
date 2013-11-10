@@ -8,26 +8,18 @@
         <link rel="shortcut icon" href="<?php echo THEMEPATH; ?>/img/folder.png">
 
         <!-- STYLES -->
-        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; 
-?>/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; 
-?>/css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; 
-?>/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; 
-?>/css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; ?>/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; ?>/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; ?>/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo THEMEPATH; ?>/css/style.css">
 
         <!-- SCRIPTS -->
-        <script type="text/javascript" 
-src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script type="text/javascript" src="<?php echo THEMEPATH; 
-?>/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<?php echo THEMEPATH; 
-?>/js/directorylister.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="<?php echo THEMEPATH; ?>/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?php echo THEMEPATH; ?>/js/directorylister.js"></script>
 
         <!-- FONTS -->
-        <link rel="stylesheet" type="text/css"  
-href="http://fonts.googleapis.com/css?family=Cutive+Mono">
+        <link rel="stylesheet" type="text/css"  href="http://fonts.googleapis.com/css?family=Cutive+Mono">
 
         <!-- META -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,8 +50,7 @@ href="http://fonts.googleapis.com/css?family=Cutive+Mono">
                     <?php foreach($breadcrumbs as $breadcrumb): ?>
                         <?php if ($breadcrumb != end($breadcrumbs)): ?>
                             <li>
-                                <a href="<?php echo $breadcrumb['link']; ?>"><?php echo 
-$breadcrumb['text']; ?></a><!--error here -->
+                                <a href="<?php echo $breadcrumb['link']; ?>"><?php echo $breadcrumb['text']; ?></a>
                                 <span class="divider">/</span>
                             </li>
                         <?php else: ?>
@@ -67,8 +58,7 @@ $breadcrumb['text']; ?></a><!--error here -->
                         <?php endif; ?>
                     <?php endforeach; ?>
                     <li id="page-top" class="pull-right" style="display: hidden;">
-                        <a href="javascript:void(0)"><i 
-class="icon-circle-arrow-up"></i></a>
+                        <a href="javascript:void(0)"><i class="icon-circle-arrow-up"></i></a>
                     </li>
                 </ul>
             </div>
@@ -95,11 +85,8 @@ class="icon-circle-arrow-up"></i></a>
                 </li>
 
                 <?php foreach($dirArray as $name => $fileInfo): ?>
-                    <li class="clearfix" data-name="<?php echo $name; ?>" data-href="<?php 
-echo $fileInfo['file_path']; ?>">
-                        <a href="<?php if (is_file($fileInfo['file_path'])) { echo 
-"getdownload.php?file=".$fileInfo['file_path']; } else { echo $fileInfo['file_path']; } ?>" 
-class="clearfix" data-name="<?php echo $name; ?>">
+                    <li class="clearfix" data-name="<?php echo $name; ?>" data-href="<?php echo $fileInfo['file_path']; ?>">
+                        <a href="<?php echo $fileInfo['file_path']; ?>" class="clearfix" data-name="<?php echo $name; ?>">
 
                             <span class="file-name">
                                 <span class="icon-wrapper">
